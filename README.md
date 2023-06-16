@@ -1,4 +1,4 @@
-# Belajar-
+# robot-bantuan-byAby
 input_pertanyaan = input('Selamat datang, ada yang bisa aku bantu sebagai robot kamu? (ketik "iya" ketika ada yang ingin dibantu) :')
 pertanyaan = ('iya')
 
