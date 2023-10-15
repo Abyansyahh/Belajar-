@@ -1,0 +1,65 @@
+#jadwal perkuliahan
+senin = "senin"
+selasa = "selasa"
+rabu = "rabu"
+kamis = "kamis"
+jumat = "jumat"
+
+#input data awal
+print ("=====================================")
+print ("=== SELAMAT DATANG DI PERKULIAHAN ===")
+print ("=====================================")
+print ("=============== MODE ================")
+print ("======== 1. Jadwal Matkul ===========")
+print ("=========    2. Tugas     ===========")
+print ("=====================================")
+print ("")
+sandi = input("MASUKKAN SANDI ANDA: ")
+
+jadwal = "1"
+tugas = "2"
+
+#sandi
+pw = "011005"
+if sandi == pw:
+    data = input('MASUKKAN KODE PROGRAM:')
+    if data == jadwal:
+        print ('============= MODE JADWAL ===========')
+        hari = input('JADWAL HARI APA? :')
+        if hari == senin:
+            print('1. B. Arab (07.30 - 09.10)')
+            print('2. PKN     (13.30 - 15.10)')
+            print('')
+            print('          DOSEN           ')
+            print('1. Bu Lalah Alawiyah')
+            print('2. Pak Wahdi')
+        elif hari == selasa:
+            print('1. Ulumul Quran (11.10 - 12.50)')
+            print('')
+            print('             DOSEN             ')
+            print('1. Pak Soleh Hasan')
+        elif hari == rabu:
+            print('1. IPI        (07.30 - 09.10)')
+            print('2. B. Indo    (09.30 - 11.50)')
+            print('3. Praktikum  (13.30 - 15.10)')
+            print('            DOSEN            ')
+            print('1. Pak Bobi')
+            print('2. Bu Neneng Nurjanah')
+            print('3. Pak Ridholloh')
+        elif hari == kamis:
+            print('1. SI         (07.30 - 09.10)')
+            print('2. B. Inggris (09.30 - 11.50)')
+            print('            DOSEN            ')
+            print('1. Pak Nana Meily dan Pak Prof. Armai')
+            print('2. Bu Neneng Nurjanah')
+        else:
+            print('HARI JUMAT LIBURRRRRRR')
+#ini bagian tugas
+    elif data == tugas:
+        print('1. B. Arab     (hal 58, 59)')
+        print('2. PKN         (Kel, Bikin ppt)')
+        print('3. Praktikum   (Hafalan)')
+        print('4. B. Ing      (UTS)')
+        print('5. SI          (Revisi Makalah)')
+else:
+    print('SANDI ANDA SALAH')
