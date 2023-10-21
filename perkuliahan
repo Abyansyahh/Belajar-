@@ -56,10 +56,10 @@ if sandi == pw:
             print('HARI JUMAT LIBURRRRRRR')
 #ini bagian tugas
     elif data == tugas:
-        print('1. B. Arab     (hal 58, 59)')
-        print('2. PKN         (Kel, Bikin ppt)')
-        print('3. Praktikum   (Hafalan)')
-        print('4. B. Ing      (UTS)')
-        print('5. SI          (Revisi Makalah)')
+        print('1. PKN         (Kel, Bikin ppt)')
+        print('2. SI          (Revisi Makalah)')
+        print('3. B. Arab.    (Kerjakan pg)   ')
+        print('4. B. Indo     (UTS)           ')
+        
 else:
     print('SANDI ANDA SALAH')
