@@ -1,0 +1,152 @@
+import random
+
+class Pemain:
+    def __init__(self, nama):
+        self.nama = nama
+        self.level = 1
+        self.pengalaman = 0
+        self.exp_untuk_naik_level = 100
+        self.kesehatan = 100
+        self.kesehatan_maks = 100
+        self.kekuatan = 10
+        self.mana = 50
+        self.emas = 50
+        self.inventaris = {'Ramuan Penyembuhan': 1, 'Ramuan Amarah': 1}  # Awalnya memiliki 1 ramuan penyembuhan dan amarah
+    
+    def dapatkan_pengalaman(self, xp):
+        self.pengalaman += xp
+        if self.pengalaman >= self.exp_untuk_naik_level:
+            self.naik_level()
+
+    def naik_level(self):
+        self.level += 1
+        self.pengalaman = 0
+        self.exp_untuk_naik_level += 100
+        self.kesehatan_maks += 20
+        self.kesehatan = self.kesehatan_maks
+        self.kekuatan += 5
+        print(f"{self.nama} telah naik level! Sekarang di level {self.level}.")
+    
+    def beli_item(self, item):
+        if self.emas >= item['harga']:
+            self.emas -= item['harga']
+            self.inventaris[item['nama']] += 1
+            print(f"{self.nama} membeli {item['nama']}.")
+        else:
+            print(f"{self.nama} tidak memiliki cukup emas.")
+
+    def tampilkan_statistik(self):
+        print(f"Nama: {self.nama}, Level: {self.level}, Kesehatan: {self.kesehatan}, Kekuatan: {self.kekuatan}, Mana: {self.mana}, Emas: {self.emas}")
+
+    def gunakan_ramuan(self, jenis):
+        if jenis == 'Ramuan Penyembuhan' and self.inventaris[jenis] > 0:
+            self.kesehatan += 50
+            if self.kesehatan > self.kesehatan_maks:
+                self.kesehatan = self.kesehatan_maks
+            self.inventaris[jenis] -= 1
+            print(f"{self.nama} menggunakan Ramuan Penyembuhan. Kesehatan saat ini: {self.kesehatan}/{self.kesehatan_maks}.")
+        elif jenis == 'Ramuan Amarah' and self.inventaris[jenis] > 0:
+            self.kekuatan += 10
+            self.inventaris[jenis] -= 1
+            print(f"{self.nama} menggunakan Ramuan Amarah. Kekuatan saat ini: {self.kekuatan}.")
+        else:
+            print(f"Kamu tidak memiliki {jenis}!")
+
+class Monster:
+    def __init__(self, nama, kesehatan, kekuatan):
+        self.nama = nama
+        self.kesehatan = kesehatan
+        self.kesehatan_maks = kesehatan
+        self.kekuatan = kekuatan
+
+    def tampilkan_hp(self):
+        bar_kesehatan = f"{self.nama}: [{'#' * (self.kesehatan * 10 // self.kesehatan_maks)}{' ' * (10 - self.kesehatan * 10 // self.kesehatan_maks)}] {self.kesehatan}/{self.kesehatan_maks}"
+        print(bar_kesehatan)
+
+class Game:
+    def __init__(self, pemain):
+        self.pemain = pemain
+        self.jumlah_dungeon = 0
+        self.dungeon_maksimal = random.randint(20, 40)  # Jumlah dungeon diacak
+        self.daftar_monster = [
+            Monster("Goblin", 50, 5),
+            Monster("Orc", 80, 10),
+            Monster("Troll", 120, 15)
+        ]
+    
+    def temui_monster(self):
+        monster = random.choice(self.daftar_monster)
+        print(f"Monster {monster.nama} muncul!")
+        while monster.kesehatan > 0 and self.pemain.kesehatan > 0:
+            # Tampilkan HP Bar untuk pemain dan monster
+            print(f"\n{self.pemain.nama}: [{'#' * (self.pemain.kesehatan * 10 // self.pemain.kesehatan_maks)}{' ' * (10 - self.pemain.kesehatan * 10 // self.pemain.kesehatan_maks)}] {self.pemain.kesehatan}/{self.pemain.kesehatan_maks}")
+            monster.tampilkan_hp()
+
+            aksi = input(f"\nApa yang ingin kamu lakukan? [S]erang, [P]akai ramuan: ").lower()
+            if aksi == "s":
+                damage = self.pemain.kekuatan
+                monster.kesehatan -= damage
+                print(f"Kamu memberikan {damage} damage kepada {monster.nama}. Kesehatannya sekarang {monster.kesehatan}.")
+                if monster.kesehatan > 0:
+                    monster_damage = monster.kekuatan
+                    self.pemain.kesehatan -= monster_damage
+                    print(f"{monster.nama} menyerangmu! Kamu kehilangan {monster_damage} kesehatan. Kesehatanmu sekarang {self.pemain.kesehatan}.")
+            elif aksi == "p":
+                jenis_ramuan = input(f"Ramuan mana yang ingin kamu gunakan? [1] Penyembuhan, [2] Amarah: ")
+                if jenis_ramuan == "1":
+                    self.pemain.gunakan_ramuan('Ramuan Penyembuhan')
+                elif jenis_ramuan == "2":
+                    self.pemain.gunakan_ramuan('Ramuan Amarah')
+                else:
+                    print("Pilihan tidak valid!")
+            else:
+                print("Aksi tidak valid!")
+
+        if self.pemain.kesehatan > 0:
+            xp_didapatkan = 50
+            print(f"\nKamu berhasil mengalahkan {monster.nama}! Kamu mendapatkan {xp_didapatkan} XP.")
+            self.pemain.dapatkan_pengalaman(xp_didapatkan)
+        else:
+            print("\nKamu telah dikalahkan...")
+            return
+
+    def pergi_ke_toko(self):
+        print("\nSelamat datang di toko!")
+        item_toko = [
+            {'nama': 'Ramuan Penyembuhan', 'harga': 20},
+            {'nama': 'Ramuan Amarah', 'harga': 15}
+        ]
+        for idx, item in enumerate(item_toko):
+            print(f"{idx + 1}. {item['nama']} - {item['harga']} emas")
+
+        pilihan = input("Item mana yang ingin kamu beli? (Masukkan nomor atau 'q' untuk keluar): ").lower()
+        if pilihan.isdigit() and 1 <= int(pilihan) <= len(item_toko):
+            item_terpilih = item_toko[int(pilihan) - 1]
+            self.pemain.beli_item(item_terpilih)
+        elif pilihan == 'q':
+            print("Kamu keluar dari toko.")
+        else:
+            print("Pilihan tidak valid. Kamu keluar dari toko.")
+
+    def mainkan(self):
+        print("\nPetualanganmu dimulai!")
+        while self.jumlah_dungeon < self.dungeon_maksimal:
+            self.jumlah_dungeon += 1
+            print(f"\nMemasuki dungeon {self.jumlah_dungeon}...")
+            self.temui_monster()
+            if self.pemain.kesehatan <= 0:
+                print("Permainan Berakhir")
+                break
+
+            aksi_berikutnya = input("\nApakah kamu ingin [L]anjut atau [K]e toko? ").lower()
+            if aksi_berikutnya == "k":
+                self.pergi_ke_toko()
+
+        print("Kamu telah menyelesaikan dungeon!")
+        self.pemain.tampilkan_statistik()
+
+# Memulai permainan
+nama = input("Masukkan nama karaktermu: ")
+pemain = Pemain(nama)
+game = Game(pemain)
+game.mainkan()
